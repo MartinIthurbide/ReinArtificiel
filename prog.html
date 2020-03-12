@@ -1,0 +1,211 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<title> Benech-Ithurbide Medical </title>
+	<script src="Chart.js"></script>
+
+</head>
+<body>
+	<h1><center> Benech-Ithurbide Medical </center></h1>
+
+	<div id="donnees">
+		<div class="line">
+			<p id="debitSang">Débit de sang :</p>
+			<p class="val">...</p>
+			<p>&nbspmL/min</p>
+		</div>
+
+		<div class="cadre">
+
+			<div class="line">
+				<p>Protéines :</p>
+				<div class="donnee">
+					<p class="val">...</p>
+					<p class="unite">&nbspdag/L</p>
+				</div>
+			</div>
+
+			<div class="line">
+				<p>Glucides :</p>
+				<div class="donnee">
+					<p class="val">...</p>
+					<p class="unite">&nbspdg/L</p>
+				</div>
+			</div>
+
+			<div class="line">
+				<p>Eau :</p>
+				<div class="donnee">
+					<p class="val">...</p>
+					<p class="unite">&nbsphg/L</p>
+				</div>
+			</div>
+
+			<div class="line">
+				<p>Lipides :</p>
+				<div class="donnee">
+					<p class="val">...</p>
+					<p class="unite">&nbspdg/L</p>
+				</div>
+			</div>   
+
+		</div>
+
+		<div class="cadre">
+
+			<div class="line">
+				<p>Urée :</p>
+				<div class="donnee">
+					<p class="val">...</p>
+					<p class="unite">&nbspcg/L</p>
+				</div>
+			</div>
+
+			<div class="line">
+				<p>Acide urique :</p>
+				<div class="donnee">
+					<p class="val">...</p>
+					<p class="unite">&nbspmg/L</p>
+				</div>
+			</div>            
+
+		</div>
+	</div>
+
+	<div style="width: 90%">
+		<canvas id="myChart"></canvas>
+	</div>
+
+	<div>
+		<button > Telecharger données</button>
+	</div>
+
+	<script>
+
+		function getRandomArbitrary(min, max) {
+  			return Math.random() * (max - min) + min;
+		}
+
+		
+		// Protéines, Glucides, Eau, Lipides, Urée, Acide urique
+		var tabMin = new Array(3.2, 8, 8.47, 13, 0, 0);
+
+		var tabMax = new Array(7.24, 12, 11.45, 18, 10, 10);
+
+		
+		//Graphique
+		var ctx = document.getElementById('myChart').getContext('2d');
+		var chart = new Chart(ctx, {
+			type: 'line',
+    		data: {
+		    labels: ["-40 sec", "-30 sec", "-20 sec", "-10 sec", "0 sec"],
+		        datasets: [{
+		            label: 'Protéines',
+		            borderColor: 'rgb(255, 99, 132)',
+		            fill: false,
+		            data: [0,0,0,0,0]
+		        },
+		        {
+		        	label: 'Glucides',
+		    		borderColor: 'rgb(255,127,80)',
+		    		fill: false,
+		    		data: [0,0,0,0,0]
+		        },
+		        {
+		        	label: 'Eau',
+		    		borderColor: 'rgb(135,206,235)',
+		    		fill: false,
+		    		data: [0,0,0,0,0]
+		        },
+		        {
+		        	label: 'Lipides',
+					borderColor: 'rgb(200,205,42)',
+					fill: false,
+		    		data: [0,0,0,0,0]
+		        },
+		        {
+		        	label: 'Urée',
+		    		borderColor: 'rgb(228,246,8)',
+		    		fill: false,
+		    		data: [0,0,0,0,0]
+		        },
+		        {
+		        	label: 'Acide urique',
+		    		borderColor: 'rgb(240,230,140)',
+		    		fill: false,
+		    		data: [0,0,0,0,0]
+		        },
+
+		        ]
+		       	},		 
+
+
+		    // Configuration options
+		    options: {
+		    	legend:{
+		    		display: true,
+		    		position: 'bottom'
+		    	},
+		    	title:{
+		    		display: true,
+		    		text: "Analyses du sang"
+		    	}
+		    }
+		});
+
+
+		function initChart(chart) {
+
+			for (var i=0; i < chart.data.datasets.length; i++) {
+
+				for (var k = 0; k < chart.data.datasets[i].data.length; k++) {
+					
+					var val = getRandomArbitrary(tabMin[i], tabMax[i]);
+					chart.data.datasets[i].data[k] = val;
+
+				}
+
+				document.getElementsByClassName("val").item(0).innerHTML=String(getRandomArbitrary(89, 91).toFixed(2));
+				document.getElementsByClassName("val").item(i+1).innerHTML=String(val.toFixed(2));
+
+			}
+
+			chart.update();
+		}
+
+
+		function updateChart(chart) {
+
+			for (var i=0; i < chart.data.datasets.length; i++) {
+
+				for (var k = 1 ; k < chart.data.datasets[i].data.length ; k++) {
+					
+					chart.data.datasets[i].data[k-1] = chart.data.datasets[i].data[k];
+
+				}
+
+				var val = getRandomArbitrary(tabMin[i], tabMax[i]);
+				chart.data.datasets[i].data[chart.data.datasets[i].data.length-1] = val;
+				document.getElementsByClassName("val").item(i+1).innerHTML=String(val.toFixed(2));
+
+			}
+
+			chart.update();
+		}
+
+		
+		
+		// Corps du programme
+		initChart(chart);
+
+		setInterval(function() {
+
+			document.getElementsByClassName("val").item(0).innerHTML=String(getRandomArbitrary(89, 91).toFixed(2));
+			updateChart(chart);
+
+		},10000);
+
+	</script>
+</body>
+</html>
